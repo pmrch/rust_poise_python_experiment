@@ -1,0 +1,18 @@
+[package]
+name = "rust_src"
+version = "0.1.0"
+edition = "2024"
+
+
+[lib]
+name = "rust_src"
+crate-type = ["cdylib"]
+
+[dependencies]
+dotenv = "0.15.0"
+numpy = "0.21.0"
+poise = "0.6.1"
+pyo3 = { version = "0.21.0", features = ["full"] }
+pyo3-asyncio-0-21 = { version = "0.21.0", features = ["async-channel", "tokio", "tokio-runtime"] }
+songbird = { version = "0.5.0", features = ["receive"] }
+tokio = { version = "1.47.1", features = ["full"] }

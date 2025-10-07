@@ -9,10 +9,13 @@ name = "rust_src"
 crate-type = ["cdylib"]
 
 [dependencies]
+chrono = { version = "0.4.42", features = ["serde"] }
 dotenv = "0.15.0"
+log = "0.4.28"
 numpy = "0.21.0"
 poise = "0.6.1"
 pyo3 = { version = "0.21.0", features = ["full"] }
 pyo3-asyncio-0-21 = { version = "0.21.0", features = ["async-channel", "tokio", "tokio-runtime"] }
+simplelog = "0.12.2"
 songbird = { version = "0.5.0", features = ["receive"] }
 tokio = { version = "1.47.1", features = ["full"] }

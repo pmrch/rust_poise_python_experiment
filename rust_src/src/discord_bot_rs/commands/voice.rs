@@ -1,5 +1,9 @@
-use poise::serenity_prelude::Mentionable;
+use std::sync::Arc;
 
+use poise::serenity_prelude::Mentionable;
+use songbird::{CoreEvent};
+
+use crate::discord_bot_rs::audio::handler::VoiceHandler;
 use crate::prelude::{PoiseContext, PoiseResult};
 use crate::discord_bot_rs::commands::cmd;
 use crate::discord_bot_rs::utility::send_reply_eph;
@@ -39,6 +43,16 @@ pub async fn join(ctx: PoiseContext<'_>) -> PoiseResult<()> {
         Ok(_mutex_call) => {
             let text: String = format!("Successfully join channel {}", voice_channel.mention().to_string());
             send_reply_eph(ctx.clone(), text).await?;
+
+            let mut call = _mutex_call.lock().await;
+            let handler: Arc<VoiceHandler> = Arc::new(VoiceHandler{});
+            
+            call.add_global_event(CoreEvent::ClientDisconnect.into(), *Arc::clone(&handler));
+            call.add_global_event(CoreEvent::SpeakingStateUpdate.into(), *Arc::clone(&handler));
+            call.add_global_event(CoreEvent::DriverConnect.into(), *Arc::clone(&handler));
+            call.add_global_event(CoreEvent::DriverDisconnect.into(), *Arc::clone(&handler));
+            call.add_global_event(CoreEvent::DriverReconnect.into(), *Arc::clone(&handler));
+            call.add_global_event(CoreEvent::VoiceTick.into(), *Arc::clone(&handler));
         }
         Err(e) => return Err(Box::new(e))
     }

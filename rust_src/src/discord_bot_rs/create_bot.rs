@@ -9,14 +9,14 @@ use poise::{
 use songbird::SerenityInit;
 
 use crate::discord_bot_rs::commands::util::ping;
-use crate::discord_bot_rs::commands::voice::join;
+use crate::discord_bot_rs::commands::voice::{join, leave};
 use crate::prelude::{Data, PoiseError, PoiseResult};
 
 pub async fn create_bot(intents: GatewayIntents, token: String) -> PoiseResult<Client> {
     let framework = Framework::builder()
         .options(FrameworkOptions::<Data, PoiseError> {
             // To be populated soon
-            commands: vec![ping(), join()],
+            commands: vec![ping(), join(), leave()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework|{

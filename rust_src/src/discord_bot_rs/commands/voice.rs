@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use poise::serenity_prelude::Mentionable;
 use songbird::{CoreEvent};
 
@@ -45,14 +43,14 @@ pub async fn join(ctx: PoiseContext<'_>) -> PoiseResult<()> {
             send_reply_eph(ctx.clone(), text).await?;
 
             let mut call = _mutex_call.lock().await;
-            let handler: Arc<VoiceHandler> = Arc::new(VoiceHandler{});
-            
-            call.add_global_event(CoreEvent::ClientDisconnect.into(), *Arc::clone(&handler));
-            call.add_global_event(CoreEvent::SpeakingStateUpdate.into(), *Arc::clone(&handler));
-            call.add_global_event(CoreEvent::DriverConnect.into(), *Arc::clone(&handler));
-            call.add_global_event(CoreEvent::DriverDisconnect.into(), *Arc::clone(&handler));
-            call.add_global_event(CoreEvent::DriverReconnect.into(), *Arc::clone(&handler));
-            call.add_global_event(CoreEvent::VoiceTick.into(), *Arc::clone(&handler));
+            let voice_handler = VoiceHandler::new();
+
+            call.add_global_event(CoreEvent::ClientDisconnect.into(), voice_handler.clone());
+            call.add_global_event(CoreEvent::SpeakingStateUpdate.into(), voice_handler.clone());
+            call.add_global_event(CoreEvent::DriverConnect.into(), voice_handler.clone());
+            call.add_global_event(CoreEvent::DriverDisconnect.into(), voice_handler.clone());
+            call.add_global_event(CoreEvent::DriverReconnect.into(), voice_handler.clone());
+            call.add_global_event(CoreEvent::VoiceTick.into(), voice_handler.clone());
         }
         Err(e) => return Err(Box::new(e))
     }
